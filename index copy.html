@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News Template Generator</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    
+    <style>
+        @font-face {
+            font-family: 'MyFont';
+            src: url('font.ttf');
+        }
+
+
+
+        body{
+            margin: 20px;
+        }
+        #preview-container {
+            position: relative;
+            width: 600px;
+            height: 600px;
+            border: 1px solid #ccc;
+            margin: 20px auto;
+            overflow: hidden;
+        }
+
+        /* #template-image, #uploaded-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        } */
+
+
+
+
+        #template-image {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1; /* Template image on top */
+    }
+
+
+        #uploaded-image {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover; /* Ensure the uploaded image fills the space */
+        z-index: -2; /* Behind template */
+    }
+    #preview-container {
+        position: relative;
+        width: 600px;
+        height: 600px;
+        border: 1px solid #ccc;
+        margin: 20px auto;
+        overflow: hidden;
+    }
+
+
+
+
+    #location, #date {
+    position: absolute;
+    color: red;
+    font-family: 'MyFont';
+    text-shadow: 2px 2px 0px white, -2px -2px 0px white, 
+                 -2px 2px 0px white, 2px -2px 0px white, 
+                 2px 0px 0px white, -2px 0px 0px white, 
+                 0px 2px 0px white, 0px -2px 0px white;
+}
+
+
+        #title {
+            position: absolute;
+            bottom: 500px;
+            left: 2.5%;
+            width: 95%;
+            color: yellow;
+            font-size: 60px;
+            text-align: center;
+            font-family: 'MyFont';
+        }
+
+        #description {
+            position: absolute;
+            bottom: 200px;
+            left: 2.5%;
+            width: 95%;
+            color: white;
+            text-align: center;
+            font-family: 'MyFont';
+        }
+
+        #footer-ad {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 110px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-4">
+            <h4>Controls</h4>
+
+            <label>Location</label>
+            <input type="text" class="form-control" id="location-input" value="Location">
+            <label>Location Position</label>
+            <input type="range" id="location-left" min="0" max="100" value="10">
+            <input type="range" id="location-top" min="0" max="100" value="10">
+            <input type="range" id="location-size" min="20" max="100" value="30">
+
+            <label>Date</label>
+            <input type="date" class="form-control" id="date-input">
+            <label>Date Position</label>
+            <input type="range" id="date-left" min="0" max="100" value="80">
+            <input type="range" id="date-top" min="0" max="100" value="10">
+            <input type="range" id="date-size" min="20" max="100" value="30">
+
+
+            <label>Title</label>
+            <textarea class="form-control" id="title-input">Title Text</textarea>
+            <label>Title Position</label>
+            <input type="range" id="title-left" min="-100" max="100" value="2.5">
+            <input type="range" id="title-bottom" min="0" max="1000" value="500">
+            <label>Title Size</label>
+            <input type="range" id="title-size" min="20" max="100" value="60">
+
+            <label>Description</label>
+            <textarea class="form-control" id="description-input">Description Text</textarea>
+            <label>Description Position</label>
+            <input type="range" id="description-left" min="-100" max="100" value="2.5">
+            <input type="range" id="description-bottom" min="0" max="1000" value="200">
+            <label>Description Size</label>
+            <input type="range" id="description-size" min="12" max="40" value="16">
+
+
+
+            <div class="mb-3">
+                <label for="footer-select" class="form-label">Footer Ad</label>
+                <select class="form-select" id="footer-select">
+                    <option value="0.png">Cute Cakes</option>
+                    <option value="1.png">Royal Enfiled</option>
+                    <option value="2.png">Abinesh Media Works</option>
+                    <option value="3.png">Leos</option>
+                    <option value="4.png">National</option>
+                    <option value="5.png">State</option>
+                    <option value="6.png">Apple</option>
+                    <option value="7.png">AJ</option>
+                    <option value="8.png">Banu Gym</option>
+                    <option value="9.png">SS</option>
+                    <option value="10.png">Karuna Vegetables</option>
+                    <option value="11.png">Raja inba</option>
+                    <option value="12.png">Durga</option>
+                    <option value="13.png">Amizh</option>
+                    <option value="14.png">Pooja</option>
+                    <option value="15.png">SN Cards</option>
+                    <option value="16.png">Atlantic</option>
+                    
+                </select>
+                <label>Footer Position</label>
+                <input type="range" id="footer-bottom" min="0" max="1000" value="0">
+            </div>
+
+            <div class="mb-3">
+                <label for="uploaded-image-input" class="form-label">Upload Image</label>
+                <input type="file" class="form-control" id="uploaded-image-input" accept="image/*">
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Image Adjustments:</label>
+                <div class="row">
+                    <div class="col-6">
+                        <label for="image-width-slider" class="form-label">Width (%)</label>
+                        <input type="range" class="form-range" id="image-width-slider" min="0" max="200" value="100">
+                    </div>
+                    <div class="col-6">
+                        <label for="image-height-slider" class="form-label">Height (%)</label>
+                        <input type="range" class="form-range" id="image-height-slider" min="0" max="200" value="100">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <label for="image-left-slider" class="form-label">Left (%)</label>
+                        <input type="range" class="form-range" id="image-left-slider" min="-100" max="100" value="0">
+                    </div>
+                    <div class="col-6">
+                        <label for="image-top-slider" class="form-label">Top (%)</label>
+                        <input type="range" class="form-range" id="image-top-slider" min="-100" max="100" value="0">
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn btn-primary mt-3" id="download-btn">Download Image</button>
+        </div>
+
+          <div class="col-md-8">
+            <h4>Preview</h4>
+            <div id="preview-container">
+                <img src="template.png" id="template-image">
+                <div id="location-date">
+                    <span id="location">Location</span>
+                    <span id="date">Date</span>
+                </div>
+                <div id="title">Title Text</div>
+                <div id="description">Description Text</div>
+                <img src="1.png" id="footer-ad">
+                <img src="" id="uploaded-image" style="display: none;">
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+<script>
+    document.getElementById('location-input').addEventListener('input', e => document.getElementById('location').textContent = e.target.value);
+    document.getElementById('date-input').addEventListener('input', e => document.getElementById('date').textContent = e.target.value);
+    document.getElementById('title-input').addEventListener('input', e => document.getElementById('title').textContent = e.target.value);
+    document.getElementById('description-input').addEventListener('input', e => document.getElementById('description').textContent = e.target.value);
+    document.getElementById('location-size').addEventListener('input', e => {
+        document.getElementById('location').style.fontSize = e.target.value + 'px';
+    });
+    document.getElementById('location-left').addEventListener('input', e => document.getElementById('location').style.left = e.target.value + '%');
+    document.getElementById('location-top').addEventListener('input', e => document.getElementById('location').style.top = e.target.value + 'px');
+
+    document.getElementById('date-left').addEventListener('input', e => document.getElementById('date').style.left = e.target.value + '%');
+    document.getElementById('date-top').addEventListener('input', e => document.getElementById('date').style.top = e.target.value + 'px');
+    document.getElementById('date-size').addEventListener('input', e => {
+        document.getElementById('date').style.fontSize = e.target.value + 'px';
+    });
+    document.getElementById('title-left').addEventListener('input', e => document.getElementById('title').style.left = e.target.value + '%');
+    document.getElementById('title-bottom').addEventListener('input', e => document.getElementById('title').style.bottom = e.target.value + 'px');
+    document.getElementById('title-size').addEventListener('input', e => document.getElementById('title').style.fontSize = e.target.value + 'px');
+
+    document.getElementById('description-left').addEventListener('input', e => document.getElementById('description').style.left = e.target.value + '%');
+    document.getElementById('description-bottom').addEventListener('input', e => document.getElementById('description').style.bottom = e.target.value + 'px');
+    document.getElementById('description-size').addEventListener('input', e => document.getElementById('description').style.fontSize = e.target.value + 'px');
+
+    document.getElementById('download-btn').addEventListener('click', () => {
+        html2canvas(document.getElementById('preview-container'), {
+            width: 600,
+            height: 600,
+            scale: 2, // Ensures a perfect 1500x1500 px image
+            useCORS: true
+        }).then(canvas => {
+            const link = document.createElement('a');
+            link.download = 'news-template.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        });
+    });
+</script>
+ 
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+<script>
+    const locationInput = document.getElementById('location-input');
+    const dateInput = document.getElementById('date-input');
+    const titleInput = document.getElementById('title-input');
+    const descriptionInput = document.getElementById('description-input');
+    const footerSelect = document.getElementById('footer-select');
+    const locationDisplay = document.getElementById('location');
+    const dateDisplay = document.getElementById('date');
+    const titleDisplay = document.getElementById('title');
+    const descriptionDisplay = document.getElementById('description');
+    const footerAd = document.getElementById('footer-ad');
+    const previewContainer = document.getElementById('preview-container');
+    const downloadBtn = document.getElementById('download-btn');
+    const uploadedImageInput = document.getElementById('uploaded-image-input');
+    const uploadedImage = document.getElementById('uploaded-image');
+    const imageWidthSlider = document.getElementById('image-width-slider');
+    const imageHeightSlider = document.getElementById('image-height-slider');
+    const imageLeftSlider = document.getElementById('image-left-slider');
+    const imageTopSlider = document.getElementById('image-top-slider');
+    const locationLeft = document.getElementById('location-left');
+    const locationTop = document.getElementById('location-top');
+    const dateLeft = document.getElementById('date-left');
+    const dateTop = document.getElementById('date-top');
+    const titleLeft = document.getElementById('title-left');
+    const titleBottom = document.getElementById('title-bottom');
+    const titleSize = document.getElementById('title-size');
+    const descriptionLeft = document.getElementById('description-left');
+    const descriptionBottom = document.getElementById('description-bottom');
+    const descriptionSize = document.getElementById('description-size');
+    const footerBottom = document.getElementById('footer-bottom');
+
+    locationInput.addEventListener('input', () => locationDisplay.textContent = locationInput.value);
+    dateInput.addEventListener('input', () => dateDisplay.textContent = dateInput.value);
+    titleInput.addEventListener('input', () => titleDisplay.textContent = titleInput.value);
+    descriptionInput.addEventListener('input', () => descriptionDisplay.textContent = descriptionInput.value);
+    footerSelect.addEventListener('change', () => footerAd.src = footerSelect.value);
+
+    uploadedImageInput.addEventListener('change', (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                uploadedImage.src = e.target.result;
+                uploadedImage.style.display = 'block';
+                updateImageStyle();
+            };
+            reader.readAsDataURL(file);
+        } else {
+            uploadedImage.style.display = 'none';
+        }
+    });
+
+    imageWidthSlider.addEventListener('input', updateImageStyle);
+    imageHeightSlider.addEventListener('input', updateImageStyle);
+    imageLeftSlider.addEventListener('input', updateImageStyle);
+    imageTopSlider.addEventListener('input', updateImageStyle);
+
+    locationLeft.addEventListener('input', updateLocationPosition);
+    locationTop.addEventListener('input', updateLocationPosition);
+    dateLeft.addEventListener('input', updateDatePosition);
+    dateTop.addEventListener('input', updateDatePosition);
+    titleLeft.addEventListener('input', updateTitlePosition);
+    titleBottom.addEventListener('input', updateTitlePosition);
+    titleSize.addEventListener('input', updateTitlePosition);
+    descriptionLeft.addEventListener('input', updateDescriptionPosition);
+    descriptionBottom.addEventListener('input', updateDescriptionPosition);
+    descriptionSize.addEventListener('input', updateDescriptionPosition);
+    footerBottom.addEventListener('input', updateFooterPosition);
+
+    function updateImageStyle() {
+        uploadedImage.style.width = imageWidthSlider.value + '%';
+        uploadedImage.style.height = imageHeightSlider.value + '%';
+        uploadedImage.style.left = imageLeftSlider.value + '%';
+        uploadedImage.style.top = imageTopSlider.value + '%';
+    }
+
+    function updateLocationPosition() {
+        locationDisplay.style.left = locationLeft.value + '%';
+        locationDisplay.style.top = locationTop.value + '%';
+        dateDisplay.style.left = dateLeft.value + '%';
+        dateDisplay.style.top = dateTop.value + '%';
+    }
+
+    function updateDatePosition() {
+        locationDisplay.style.left = locationLeft.value + '%';
+        locationDisplay.style.top = locationTop.value + '%';
+        dateDisplay.style.left = dateLeft.value + '%';
+        dateDisplay.style.top = dateTop.value + '%';
+    }
+
+    function updateTitlePosition() {
+        titleDisplay.style.left = titleLeft.value + '%';
+        titleDisplay.style.bottom = titleBottom.value + 'px';
+        titleDisplay.style.fontSize = titleSize.value + 'px';
+    }
+
+    function updateDescriptionPosition() {
+        descriptionDisplay.style.left = descriptionLeft.value + '%';
+        descriptionDisplay.style.bottom = descriptionBottom.value + 'px';
+        descriptionDisplay.style.fontSize = descriptionSize.value + 'px';
+    }
+
+    function updateFooterPosition() {
+        footerAd.style.bottom = footerBottom.value + 'px';
+    }
+
+ 
+</script>
+
+</body>
+</html>
